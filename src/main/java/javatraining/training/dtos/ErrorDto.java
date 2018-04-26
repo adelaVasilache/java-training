@@ -1,23 +1,23 @@
 package javatraining.training.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
-
+import org.springframework.http.HttpStatus;
 
 /**
- * Created by Adela Vasilache on 23.04.2018
+ * Created by Adela Vasilache on 26.04.2018
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ImageDto {
-    @NotEmpty
-    private String fileName;
+@Builder
+public class ErrorDto {
+    private HttpStatus status;
 
-    @NotEmpty
-    private String filePath;
+    private String message;
+
 }
