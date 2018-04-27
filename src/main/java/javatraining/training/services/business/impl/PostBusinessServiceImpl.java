@@ -42,7 +42,7 @@ public class PostBusinessServiceImpl implements PostBusinessService {
     @Override
     public void addPost(PostDto postDto, Authentication authentication) throws NotFoundException, InvalidDataException {
         User user = userService.getUserByEmail(authentication.getPrincipal().toString());
-        Post post = postMapper.copyProperties(postDto, user, null);
+        Post post = postMapper.setProperties(postDto, user, null);
         post.setTags(tagsService.addTagsThatDontExist(post.getTags()));
         post.setImages(imageService.addImagesThatDontExist(post.getImages()));
         try {
@@ -58,7 +58,7 @@ public class PostBusinessServiceImpl implements PostBusinessService {
         if(!post.getUser().getEmail().equals(authentication.getPrincipal().toString())){
             throw new UserRightsException(authentication.getPrincipal().toString());
         }
-        Post postUpdated = postMapper.copyProperties(postDto,post.getUser(), post.getId());
+        Post postUpdated = postMapper.setProperties(postDto,post.getUser(), post.getId());
         postUpdated.setTags(tagsService.addTagsThatDontExist(postUpdated.getTags()));
         postUpdated.setImages(imageService.addImagesThatDontExist(postUpdated.getImages()));
         try {

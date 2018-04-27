@@ -1,13 +1,11 @@
 package javatraining.training.controllers;
 
-import com.sun.deploy.net.HttpDownload;
 import com.sun.media.sound.InvalidDataException;
 import javatraining.training.dtos.CommentDto;
 import javatraining.training.dtos.GradeDto;
 import javatraining.training.dtos.PostDto;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.exceptions.UserRightsException;
-import javatraining.training.models.Comment;
 import javatraining.training.services.business.PostBusinessService;
 import javatraining.training.services.domain.PostService;
 import org.springframework.beans.factory.annotation.Autowired;

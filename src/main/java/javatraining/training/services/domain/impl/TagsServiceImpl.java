@@ -33,6 +33,7 @@ public class TagsServiceImpl implements TagsService {
                 tag -> !existingTagNames.contains(tag.getName())).collect(Collectors.toSet());
         tagRepository.save(tagsToSave);
         existingTags.addAll(tagsToSave);
+
         return existingTags;
     }
 }

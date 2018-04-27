@@ -24,7 +24,7 @@ public abstract class PostMapper {
     @Mapping(target = "images", ignore = true)
     public abstract Post toPost(PostDto postDto);
 
-    public Post copyProperties(PostDto postDto, User user, Long postId) {
+    public Post setProperties(PostDto postDto, User user, Long postId) {
         Post post = toPost(postDto);
         post.setCreated(new Date());
         post.setTags(TagMapper.INSTANCE.toTagList(postDto.getTags()));

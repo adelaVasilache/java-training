@@ -27,6 +27,7 @@ public class PostBusinessServiceTest {
         this.postBusinessService = postBusinessService;
     }
 
+    //TODO
     @Test
     public void addPost(){
         Set<ImageDto> images = new HashSet<>(Arrays.asList(ImageFactory.createImageDto("image1", "path1"),
@@ -34,9 +35,6 @@ public class PostBusinessServiceTest {
         Set<TagDto> tags = new HashSet<>(Arrays.asList(TagFactory.createTagDto("tag1"),
                 TagFactory.createTagDto("tag2")));
         PostDto post = PostFactory.createPostDto("test post", "test content", tags, images, 8d);
-        //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken();
-        //authenticationToken.set
-        //Authentication authentication = SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken());
-        //postBusinessService.addPost(post, );
+
     }
 }

@@ -31,6 +31,7 @@ public class ImageServiceImpl implements ImageService {
                 image -> !existingImageNames.contains(image.getFileName())).collect(Collectors.toSet());
         imageRepository.save(imagesToSave);
         existingImages.addAll(imagesToSave);
+
         return existingImages;
     }
 }
