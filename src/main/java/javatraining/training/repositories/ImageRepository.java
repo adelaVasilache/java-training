@@ -12,5 +12,5 @@ import java.util.Set;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long>{
 
-    Set<Image> findByFileNameAndFilePathIn(Set<String> fileNames, Set<String> filePaths);
+    Set<Image> findByFileNameIn(Set<String> imageNames);
 }

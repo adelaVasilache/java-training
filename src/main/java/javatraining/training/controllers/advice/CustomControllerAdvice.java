@@ -3,6 +3,7 @@ package javatraining.training.controllers.advice;
 import javatraining.training.dtos.ErrorDto;
 import javatraining.training.exceptions.DuplicateUserException;
 import javatraining.training.exceptions.NotFoundException;
+import javatraining.training.exceptions.UserRightsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,17 @@ public class CustomControllerAdvice {
 
     @ExceptionHandler(value = {DuplicateUserException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> handleDuplicateUserException(Exception e) {
+    public ResponseEntity<ErrorDto> handleDuplicateUserException(Exception e) {
+        ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.CONFLICT).
+                message(messageSource.getMessage("error.user.exists", null, null)).build();
+        return new ResponseEntity<>(errorDto, HttpStatus.CONFLICT);
+    }
 
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    @ExceptionHandler(value = {UserRightsException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<ErrorDto> handleUserRightsException(Exception e) {
+        ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.FORBIDDEN).
+                message(messageSource.getMessage("error.user.rights", null, null)).build();
+        return new ResponseEntity<>(errorDto, HttpStatus.FORBIDDEN);
     }
 }

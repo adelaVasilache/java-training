@@ -1,10 +1,13 @@
 package javatraining.training.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Pattern;
 
 
 /**
@@ -14,7 +17,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class TagDto {
     @NotEmpty
+    @Pattern(regexp = "^[a-zA-Z\\s]+$")
     private String name;
 }

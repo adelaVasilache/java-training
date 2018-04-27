@@ -8,5 +8,5 @@ import java.util.Set;
  * Created by Adela Vasilache on 25.04.2018
  */
 public interface ImageService {
-    void addImagesThatDontExist(Set<Image> images);
+    Set<Image> addImagesThatDontExist(Set<Image> images);
 }

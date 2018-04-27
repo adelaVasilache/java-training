@@ -1,8 +1,10 @@
 package javatraining.training.services.business.impl;
 
+import com.sun.media.sound.InvalidDataException;
 import javatraining.training.dtos.CommentDto;
 import javatraining.training.dtos.PostDto;
 import javatraining.training.exceptions.NotFoundException;
+import javatraining.training.exceptions.UserRightsException;
 import javatraining.training.mappers.PostMapper;
 import javatraining.training.models.Post;
 import javatraining.training.models.User;
@@ -38,12 +40,34 @@ public class PostBusinessServiceImpl implements PostBusinessService {
     }
 
     @Override
-    public void addPost(PostDto postDto, Authentication authentication) throws NotFoundException {
+    public void addPost(PostDto postDto, Authentication authentication) throws NotFoundException, InvalidDataException {
         User user = userService.getUserByEmail(authentication.getPrincipal().toString());
-        Post post = postMapper.copyProperties(postDto, user);
-        tagsService.addTagsThatDontExist(post.getTags());
-        imageService.addImagesThatDontExist(post.getImages());
-        postService.save(post);
+        Post post = postMapper.copyProperties(postDto, user, null);
+        post.setTags(tagsService.addTagsThatDontExist(post.getTags()));
+        post.setImages(imageService.addImagesThatDontExist(post.getImages()));
+        try {
+            postService.save(post);
+        }catch (Exception e){
+            throw new InvalidDataException();
+        }
+    }
+
+    @Override
+    public PostDto editPost(PostDto postDto, Authentication authentication) throws NotFoundException, UserRightsException, InvalidDataException {
+        Post post = postService.findPostById(postDto.getPostId());
+        if(!post.getUser().getEmail().equals(authentication.getPrincipal().toString())){
+            throw new UserRightsException(authentication.getPrincipal().toString());
+        }
+        Post postUpdated = postMapper.copyProperties(postDto,post.getUser(), post.getId());
+        postUpdated.setTags(tagsService.addTagsThatDontExist(postUpdated.getTags()));
+        postUpdated.setImages(imageService.addImagesThatDontExist(postUpdated.getImages()));
+        try {
+            postService.save(postUpdated);
+        }catch (Exception e){
+            throw new InvalidDataException();
+        }
+
+        return postMapper.toPostDto(postUpdated);
     }
 
     @Override

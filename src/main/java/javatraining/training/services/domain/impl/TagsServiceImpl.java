@@ -1,11 +1,13 @@
 package javatraining.training.services.domain.impl;
 
+import javatraining.training.models.Post;
 import javatraining.training.models.Tag;
 import javatraining.training.repositories.TagRepository;
 import javatraining.training.services.domain.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,20 +24,15 @@ public class TagsServiceImpl implements TagsService {
     }
 
     @Override
-    public void addTagsThatDontExist(Set<Tag> tags){
-        Set<Tag> tagsToSave = getInexistentTags(tags);
-        if(tagsToSave.isEmpty()){
-            return;
-        }
-        tagRepository.save(tagsToSave);
-    }
-
-    private Set<Tag> getInexistentTags(Set<Tag> tags){
+    public Set<Tag> addTagsThatDontExist(Set<Tag> tags){
         Set<String> tagNames = tags.stream().map(Tag::getName).collect(Collectors.toSet());
         Set<Tag> existingTags = tagRepository.findByNameIn(tagNames);
         Set<String> existingTagNames = existingTags.stream().map(Tag::getName).collect(Collectors.toSet());
 
-        return tags.stream().filter(
+        Set<Tag> tagsToSave = tags.stream().filter(
                 tag -> !existingTagNames.contains(tag.getName())).collect(Collectors.toSet());
+        tagRepository.save(tagsToSave);
+        existingTags.addAll(tagsToSave);
+        return existingTags;
     }
 }

@@ -1,6 +1,7 @@
 package javatraining.training.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ImageDto {
     @NotEmpty
     private String fileName;

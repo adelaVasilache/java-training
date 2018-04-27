@@ -1,17 +1,20 @@
 package javatraining.training.controllers;
 
+import com.sun.deploy.net.HttpDownload;
+import com.sun.media.sound.InvalidDataException;
 import javatraining.training.dtos.CommentDto;
 import javatraining.training.dtos.GradeDto;
 import javatraining.training.dtos.PostDto;
 import javatraining.training.exceptions.NotFoundException;
+import javatraining.training.exceptions.UserRightsException;
 import javatraining.training.models.Comment;
 import javatraining.training.services.business.PostBusinessService;
 import javatraining.training.services.domain.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.Set;
 
 /**
@@ -38,7 +42,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public void addPost(@RequestBody @Valid PostDto postDto) throws NotFoundException {
+    public void addPost(@RequestBody @Valid PostDto postDto) throws NotFoundException, InvalidDataException {
         postBusinessService.addPost(postDto, SecurityContextHolder.getContext().getAuthentication());
     }
 
@@ -60,5 +64,15 @@ public class PostController {
     @RequestMapping(value = "/popular/{perPage}")
     public ResponseEntity<Page<PostDto>> getPopular(@PathVariable Integer perPage){
         return new ResponseEntity<>(postService.getPopularPosts(perPage), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/all/{year}/{month}", method = RequestMethod.GET)
+    public ResponseEntity<Page<PostDto>> getForMonth(@PathVariable Integer year, @PathVariable Integer month) throws ParseException {
+        return new ResponseEntity<>(postService.getAllForMonth(year, month,new PageRequest(0, 10)), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public ResponseEntity<PostDto> editPost(@RequestBody @Valid PostDto postDto) throws NotFoundException, UserRightsException, InvalidDataException {
+        return new ResponseEntity<>(postBusinessService.editPost(postDto, SecurityContextHolder.getContext().getAuthentication()), HttpStatus.OK);
     }
 }

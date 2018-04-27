@@ -19,7 +19,6 @@ import java.util.Set;
 /**
  * Created by Adela Vasilache on 23.04.2018
  */
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"fileName", "filePath"}))
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

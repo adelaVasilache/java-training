@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 /**
  * Created by Adela Vasilache on 23.04.2018
@@ -27,7 +27,7 @@ public class Comment {
     private Long id;
 
     @Column(nullable = false)
-    private DateTime created;
+    private Date created;
 
     @Column(nullable = false)
     private String content;

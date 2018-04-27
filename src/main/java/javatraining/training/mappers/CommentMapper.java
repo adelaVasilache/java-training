@@ -4,12 +4,12 @@ import javatraining.training.dtos.CommentDto;
 import javatraining.training.models.Comment;
 import javatraining.training.models.Post;
 import javatraining.training.models.User;
-import org.joda.time.DateTime;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +25,7 @@ public abstract class CommentMapper {
     public Comment toComment(CommentDto commentDto, Post post, User user){
         Comment comment = new Comment();
         copyProperties(commentDto, comment);
-        comment.setCreated(new DateTime());
+        comment.setCreated(new Date());
         comment.setPost(post);
         comment.setUser(user);
 
