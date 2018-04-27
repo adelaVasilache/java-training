@@ -29,6 +29,7 @@ public class CustomControllerAdvice {
     public ResponseEntity<ErrorDto> handleNotFoundException(Exception e) {
         ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.NOT_FOUND).
                 message(messageSource.getMessage("error.not.found", null, null)).build();
+
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
 
@@ -37,6 +38,7 @@ public class CustomControllerAdvice {
     public ResponseEntity<ErrorDto> handleDuplicateUserException(Exception e) {
         ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.CONFLICT).
                 message(messageSource.getMessage("error.user.exists", null, null)).build();
+
         return new ResponseEntity<>(errorDto, HttpStatus.CONFLICT);
     }
 
@@ -45,6 +47,7 @@ public class CustomControllerAdvice {
     public ResponseEntity<ErrorDto> handleUserRightsException(Exception e) {
         ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.FORBIDDEN).
                 message(messageSource.getMessage("error.user.rights", null, null)).build();
+
         return new ResponseEntity<>(errorDto, HttpStatus.FORBIDDEN);
     }
 }

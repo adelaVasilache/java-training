@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @NoArgsConstructor
 public class PostSpecifications {
-    public static Specification<Post> seachBySubmitDate(final Date startDate, final Date endDate){
+    public static Specification<Post> seachBySubmitDate(final Date startDate, final Date endDate) {
         return (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.between(root.get(Post_.created), startDate, endDate);
     }

@@ -50,7 +50,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/latest/{perPage}", method = RequestMethod.GET)
-    public ResponseEntity<Page<PostDto>> getLatest(@PathVariable Integer perPage){
+    public ResponseEntity<Page<PostDto>> getLatest(@PathVariable Integer perPage) {
         return new ResponseEntity<>(postService.getLatestPosts(perPage), HttpStatus.OK);
     }
 
@@ -60,13 +60,13 @@ public class PostController {
     }
 
     @RequestMapping(value = "/popular/{perPage}")
-    public ResponseEntity<Page<PostDto>> getPopular(@PathVariable Integer perPage){
+    public ResponseEntity<Page<PostDto>> getPopular(@PathVariable Integer perPage) {
         return new ResponseEntity<>(postService.getPopularPosts(perPage), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/all/{year}/{month}", method = RequestMethod.GET)
     public ResponseEntity<Page<PostDto>> getForMonth(@PathVariable Integer year, @PathVariable Integer month) throws ParseException {
-        return new ResponseEntity<>(postService.getAllForMonth(year, month,new PageRequest(0, 10)), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getAllForMonth(year, month, new PageRequest(0, 10)), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)

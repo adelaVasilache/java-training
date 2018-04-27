@@ -16,7 +16,6 @@ import java.text.DecimalFormat;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GradeDto {
-
     @NotNull
     private Long postId;
 

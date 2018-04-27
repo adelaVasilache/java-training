@@ -18,7 +18,6 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Builder
 public class UserDto extends BasicUserDto {
-
     @Pattern(regexp = "^[a-zA-Z\\s]+$")
     private String firstName;
 

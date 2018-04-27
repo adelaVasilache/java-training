@@ -47,7 +47,7 @@ public class PostBusinessServiceImpl implements PostBusinessService {
         post.setImages(imageService.addImagesThatDontExist(post.getImages()));
         try {
             postService.save(post);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new InvalidDataException();
         }
     }
@@ -55,15 +55,15 @@ public class PostBusinessServiceImpl implements PostBusinessService {
     @Override
     public PostDto editPost(PostDto postDto, Authentication authentication) throws NotFoundException, UserRightsException, InvalidDataException {
         Post post = postService.findPostById(postDto.getPostId());
-        if(!post.getUser().getEmail().equals(authentication.getPrincipal().toString())){
+        if (!post.getUser().getEmail().equals(authentication.getPrincipal().toString())) {
             throw new UserRightsException(authentication.getPrincipal().toString());
         }
-        Post postUpdated = postMapper.setProperties(postDto,post.getUser(), post.getId());
+        Post postUpdated = postMapper.setProperties(postDto, post.getUser(), post.getId());
         postUpdated.setTags(tagsService.addTagsThatDontExist(postUpdated.getTags()));
         postUpdated.setImages(imageService.addImagesThatDontExist(postUpdated.getImages()));
         try {
             postService.save(postUpdated);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new InvalidDataException();
         }
 
@@ -73,7 +73,8 @@ public class PostBusinessServiceImpl implements PostBusinessService {
     @Override
     public Set<CommentDto> addComment(CommentDto commentDto, Authentication authentication) throws NotFoundException {
         User user = userService.getUserByEmail(authentication.getPrincipal().toString());
-       return postService.addComment(commentDto, user);
+
+        return postService.addComment(commentDto, user);
     }
 
 }

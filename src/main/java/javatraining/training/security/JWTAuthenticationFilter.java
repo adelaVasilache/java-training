@@ -28,14 +28,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public static final long EXPIRATION_TIME = 36_000_000;//10h
     public static final String HEADER_STRING = "Authorization";
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager){
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException {
-        try{
+        try {
             BasicUserDto credentials = new ObjectMapper().readValue(req.getInputStream(), BasicUserDto.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -43,14 +43,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     credentials.getPassword(),
                     new ArrayList<>())
             );
-        }  catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
-                                           Authentication auth) throws IOException, ServletException {
+                                            Authentication auth) throws IOException, ServletException {
         String token = Jwts.builder().setSubject(((User) auth.getPrincipal()).getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())

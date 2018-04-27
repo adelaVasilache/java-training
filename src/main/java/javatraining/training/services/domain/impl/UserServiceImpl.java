@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(UserDto userDto) throws DuplicateUserException {
-        if(checkIfUserExists(userDto.getEmail())) {
+        if (checkIfUserExists(userDto.getEmail())) {
             throw new DuplicateUserException(userDto.getEmail());
         }
         User user = userMapper.toUserWithPassword(userDto, bCryptPasswordEncoder.encode(userDto.getPassword()));
@@ -43,11 +43,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user){
+    public void save(User user) {
         userRepository.save(user);
     }
 
-    private boolean checkIfUserExists(String email){
+    private boolean checkIfUserExists(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 }

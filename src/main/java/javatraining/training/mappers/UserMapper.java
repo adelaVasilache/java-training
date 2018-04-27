@@ -18,7 +18,7 @@ public abstract class UserMapper {
     @Mapping(target = "password", ignore = true)
     public abstract User toUser(UserDto userDto);
 
-    public User toUserWithPassword(UserDto userDto, String encodedPassword){
+    public User toUserWithPassword(UserDto userDto, String encodedPassword) {
         User user = toUser(userDto);
         user.setPassword(encodedPassword);
 

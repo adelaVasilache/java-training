@@ -23,7 +23,7 @@ public interface PostService {
 
     void save(Post post);
 
-    Set<CommentDto> addComment(CommentDto commentDto, User user) throws NotFoundException ;
+    Set<CommentDto> addComment(CommentDto commentDto, User user) throws NotFoundException;
 
     Page<PostDto> getLatestPosts(Integer perPage);
 

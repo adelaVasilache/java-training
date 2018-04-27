@@ -23,8 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +34,7 @@ public class PostServiceImpl implements PostService {
     private final CommentMapper commentMapper;
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+    private static final Integer FIRST_DAY= 1;
 
     @Autowired
     public PostServiceImpl(PostRepository postRepository) {
@@ -91,7 +90,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<PostDto> getAllForMonth(Integer year, Integer month, Pageable pageable) throws ParseException {
         Specification<Post> specification = PostSpecifications.seachBySubmitDate
-                (DateUtils.getDate(year, month), DateUtils.getDate(year, month + 1));
+                (DateUtils.getDate(year, month, FIRST_DAY), DateUtils.getDate(year, month + 1, FIRST_DAY));
         List<Post> posts = postRepository.findAll(specification);
 
         return new PageImpl<>(postMapper.toPostDtoList(posts), pageable, posts.size());

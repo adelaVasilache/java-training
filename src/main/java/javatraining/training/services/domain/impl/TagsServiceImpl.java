@@ -24,7 +24,7 @@ public class TagsServiceImpl implements TagsService {
     }
 
     @Override
-    public Set<Tag> addTagsThatDontExist(Set<Tag> tags){
+    public Set<Tag> addTagsThatDontExist(Set<Tag> tags) {
         Set<String> tagNames = tags.stream().map(Tag::getName).collect(Collectors.toSet());
         Set<Tag> existingTags = tagRepository.findByNameIn(tagNames);
         Set<String> existingTagNames = existingTags.stream().map(Tag::getName).collect(Collectors.toSet());

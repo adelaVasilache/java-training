@@ -22,7 +22,7 @@ public abstract class CommentMapper {
 
     public abstract void copyProperties(CommentDto commentDto, @MappingTarget Comment comment);
 
-    public Comment toComment(CommentDto commentDto, Post post, User user){
+    public Comment toComment(CommentDto commentDto, Post post, User user) {
         Comment comment = new Comment();
         copyProperties(commentDto, comment);
         comment.setCreated(new Date());
@@ -34,7 +34,7 @@ public abstract class CommentMapper {
 
     public abstract void copyProperties(Set<Comment> comment, @MappingTarget Set<CommentDto> commentDto);
 
-    public Set<CommentDto> toCommentDtoList(Set<Comment> commentList){
+    public Set<CommentDto> toCommentDtoList(Set<Comment> commentList) {
         Set<CommentDto> commentDtos = new HashSet<>();
         copyProperties(commentList, commentDtos);
 
