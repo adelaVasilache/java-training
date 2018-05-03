@@ -16,4 +16,9 @@ public class PostSpecifications {
         return (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.between(root.get(Post_.created), startDate, endDate);
     }
+
+    public static Specification<Post> searchByExistingGrade() {
+        return ((root, criteriaQuery, criteriaBuilder) ->
+        criteriaBuilder.isTrue(root.get(Post_.grade).isNotNull()));
+    }
 }

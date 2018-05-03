@@ -1,6 +1,8 @@
 package javatraining.training.factories;
 
+import javatraining.training.dtos.UserCommentDto;
 import javatraining.training.dtos.UserDto;
+import javatraining.training.models.User;
 
 import static javatraining.training.constants.UserConstants.EMAIL;
 import static javatraining.training.constants.UserConstants.PASSWORD;
@@ -27,5 +29,16 @@ public class UserFactory {
         userDto.setFirstName(FIRST_NAME);
         userDto.setLastName(LAST_NAME);
         return userDto;
+    }
+
+    public static User createUser(){
+        User user = new User();
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
+        return user;
+    }
+
+    public static UserCommentDto createUserCommentDto(){
+        return UserCommentDto.builder().email(EMAIL).firstName(FIRST_NAME).lastName(LAST_NAME).build();
     }
 }

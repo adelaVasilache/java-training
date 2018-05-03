@@ -1,6 +1,7 @@
 package javatraining.training.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,9 +16,11 @@ import java.text.DecimalFormat;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class GradeDto {
     @NotNull
     private Long postId;
 
+    @NotNull
     private Double grade;
 }

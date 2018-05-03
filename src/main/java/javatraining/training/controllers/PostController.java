@@ -1,9 +1,11 @@
 package javatraining.training.controllers;
 
-import com.sun.media.sound.InvalidDataException;
 import javatraining.training.dtos.CommentDto;
 import javatraining.training.dtos.GradeDto;
 import javatraining.training.dtos.PostDto;
+import javatraining.training.exceptions.DuplicatePostException;
+import javatraining.training.exceptions.GradeException;
+import javatraining.training.exceptions.InvalidDataException;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.exceptions.UserRightsException;
 import javatraining.training.services.business.PostBusinessService;
@@ -40,8 +42,9 @@ public class PostController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public void addPost(@RequestBody @Valid PostDto postDto) throws NotFoundException, InvalidDataException {
+    public ResponseEntity<PostDto> addPost(@RequestBody @Valid PostDto postDto) throws NotFoundException, InvalidDataException, DuplicatePostException, GradeException {
         postBusinessService.addPost(postDto, SecurityContextHolder.getContext().getAuthentication());
+        return new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
@@ -70,7 +73,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ResponseEntity<PostDto> editPost(@RequestBody @Valid PostDto postDto) throws NotFoundException, UserRightsException, InvalidDataException {
+    public ResponseEntity<PostDto> editPost(@RequestBody @Valid PostDto postDto) throws NotFoundException, UserRightsException, InvalidDataException, GradeException {
         return new ResponseEntity<>(postBusinessService.editPost(postDto, SecurityContextHolder.getContext().getAuthentication()), HttpStatus.OK);
     }
 }

@@ -23,12 +23,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Set<Image> addImagesThatDontExist(Set<Image> images) {
-        Set<String> imageNames = images.stream().map(Image::getFileName).collect(Collectors.toSet());
-        Set<Image> existingImages = imageRepository.findByFileNameIn(imageNames);
-        Set<String> existingImageNames = existingImages.stream().map(Image::getFileName).collect(Collectors.toSet());
+        Set<String> imagePaths = images.stream().map(Image::getFilePath).collect(Collectors.toSet());
+        Set<Image> existingImages = imageRepository.findByFilePathIn(imagePaths);
+        Set<String> existingImagePaths = existingImages.stream().map(Image::getFilePath).collect(Collectors.toSet());
 
         Set<Image> imagesToSave = images.stream().filter(
-                image -> !existingImageNames.contains(image.getFileName())).collect(Collectors.toSet());
+                image -> !existingImagePaths.contains(image.getFilePath())).collect(Collectors.toSet());
         imageRepository.save(imagesToSave);
         existingImages.addAll(imagesToSave);
 

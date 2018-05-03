@@ -1,5 +1,6 @@
 package javatraining.training.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,12 @@ import javax.validation.constraints.Pattern;
 public class BasicUserDto {
     @Email
     @NotEmpty
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String email;
 
     //at least one uppercase letter, one lowercase letter, one digit, one special character and minimum 8 length
+    @NotEmpty
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
 }

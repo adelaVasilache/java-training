@@ -1,5 +1,6 @@
 package javatraining.training.config;
 
+import javatraining.training.security.ExceptionHandlerFilter;
 import javatraining.training.security.JWTAuthenticationFilter;
 import javatraining.training.security.JWTAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                // this disables session creation on Spring Security
+                .addFilterBefore(new ExceptionHandlerFilter(), JWTAuthorizationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     }

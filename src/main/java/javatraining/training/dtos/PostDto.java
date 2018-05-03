@@ -7,8 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 /**
@@ -29,11 +34,13 @@ public class PostDto {
     @NotEmpty
     private String content;
 
-    @NotNull
+    @Size(min = 1)
+    @Valid
     private Set<TagDto> tags;
 
     private Set<ImageDto> images;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double grade;
 
 }

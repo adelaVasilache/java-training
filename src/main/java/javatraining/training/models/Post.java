@@ -45,16 +45,16 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    private Double grade;
+    private Double grade = 0.0;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "post_tag",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "post_image",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id")
@@ -67,4 +67,8 @@ public class Post {
 
     @ManyToOne
     private User user;
+
+    public void addComments(Set<Comment> comments){
+        this.comments.addAll(comments);
+    }
 }

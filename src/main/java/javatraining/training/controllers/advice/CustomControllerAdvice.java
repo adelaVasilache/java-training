@@ -1,7 +1,11 @@
 package javatraining.training.controllers.advice;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import javatraining.training.dtos.ErrorDto;
+import javatraining.training.exceptions.DuplicatePostException;
 import javatraining.training.exceptions.DuplicateUserException;
+import javatraining.training.exceptions.GradeException;
+import javatraining.training.exceptions.InvalidDataException;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.exceptions.UserRightsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +53,32 @@ public class CustomControllerAdvice {
                 message(messageSource.getMessage("error.user.rights", null, null)).build();
 
         return new ResponseEntity<>(errorDto, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = {DuplicatePostException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ErrorDto> handleDuplicatePostException(Exception e) {
+        ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.CONFLICT).
+                message(messageSource.getMessage("error.duplicate.post", null, null)).build();
+
+        return new ResponseEntity<>(errorDto, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = {InvalidDataException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDto> handleInvalidDataException(Exception e) {
+        ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.BAD_REQUEST).
+                message(messageSource.getMessage("error.invalid.data", null, null)).build();
+
+        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {GradeException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDto> handleGradeException(Exception e) {
+        ErrorDto errorDto = ErrorDto.builder().status(HttpStatus.BAD_REQUEST).
+                message(messageSource.getMessage("error.invalid.grade", null, null)).build();
+
+        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 }

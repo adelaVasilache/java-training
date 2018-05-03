@@ -20,6 +20,6 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class TagDto {
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z\\s]+$")
+    @Pattern(regexp = "^\\S*$")
     private String name;
 }

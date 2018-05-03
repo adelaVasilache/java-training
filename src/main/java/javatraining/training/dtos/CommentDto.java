@@ -2,15 +2,15 @@ package javatraining.training.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import javatraining.training.models.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by Adela Vasilache on 24.04.2018
@@ -19,6 +19,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CommentDto {
     @NotEmpty
     private String content;

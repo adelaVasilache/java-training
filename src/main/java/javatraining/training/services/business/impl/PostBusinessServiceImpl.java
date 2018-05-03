@@ -1,8 +1,10 @@
 package javatraining.training.services.business.impl;
 
-import com.sun.media.sound.InvalidDataException;
 import javatraining.training.dtos.CommentDto;
 import javatraining.training.dtos.PostDto;
+import javatraining.training.exceptions.DuplicatePostException;
+import javatraining.training.exceptions.GradeException;
+import javatraining.training.exceptions.InvalidDataException;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.exceptions.UserRightsException;
 import javatraining.training.mappers.PostMapper;
@@ -40,20 +42,30 @@ public class PostBusinessServiceImpl implements PostBusinessService {
     }
 
     @Override
-    public void addPost(PostDto postDto, Authentication authentication) throws NotFoundException, InvalidDataException {
-        User user = userService.getUserByEmail(authentication.getPrincipal().toString());
-        Post post = postMapper.setProperties(postDto, user, null);
-        post.setTags(tagsService.addTagsThatDontExist(post.getTags()));
-        post.setImages(imageService.addImagesThatDontExist(post.getImages()));
-        try {
-            postService.save(post);
-        } catch (Exception e) {
-            throw new InvalidDataException();
+    public void addPost(PostDto postDto, Authentication authentication) throws NotFoundException, InvalidDataException, DuplicatePostException, GradeException {
+        if(postDto.getGrade() != null) {
+            throw new GradeException(postDto.getTitle());
         }
+        User user = userService.getUserByEmail(authentication.getPrincipal().toString());
+        if (postService.countPostsByTitle(postDto.getTitle()) > 0) {
+            throw new DuplicatePostException(postDto.getTitle());
+        }
+            Post post = postMapper.setProperties(postDto, user, null);
+            post.setTags(tagsService.addTagsThatDontExist(post.getTags()));
+            post.setImages(imageService.addImagesThatDontExist(post.getImages()));
+            try {
+                postService.save(post);
+            } catch (Exception e) {
+                throw new InvalidDataException();
+            }
+
     }
 
     @Override
-    public PostDto editPost(PostDto postDto, Authentication authentication) throws NotFoundException, UserRightsException, InvalidDataException {
+    public PostDto editPost(PostDto postDto, Authentication authentication) throws NotFoundException, UserRightsException, InvalidDataException, GradeException {
+        if(postDto.getGrade() != null) {
+            throw new GradeException(postDto.getTitle());
+        }
         Post post = postService.findPostById(postDto.getPostId());
         if (!post.getUser().getEmail().equals(authentication.getPrincipal().toString())) {
             throw new UserRightsException(authentication.getPrincipal().toString());

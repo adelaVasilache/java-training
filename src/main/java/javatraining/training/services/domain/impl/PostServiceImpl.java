@@ -48,13 +48,17 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
     }
 
+    public Long countPostsByTitle(String title){
+        return postRepository.countByTitle(title);
+    }
+
     @Override
     public Set<CommentDto> addComment(CommentDto commentDto, User user) throws NotFoundException {
         Post post = postRepository.findById(commentDto.getPostId()).orElseThrow(
                 () -> new NotFoundException(commentDto.getPostId().toString()));
         Set<Comment> comments = post.getComments();
         comments.add(commentMapper.toComment(commentDto, post, user));
-        post.setComments(comments);
+        post.addComments(comments);
         save(post);
 
         return commentMapper.toCommentDtoList(post.getComments());
@@ -72,7 +76,7 @@ public class PostServiceImpl implements PostService {
     public PostDto ratePost(GradeDto gradeDto) throws NotFoundException {
         Post post = postRepository.findById(gradeDto.getPostId()).orElseThrow(() ->
                 new NotFoundException(gradeDto.getPostId().toString()));
-        Double grade = (post.getGrade() + gradeDto.getGrade()) / 2;
+        Double grade = post.getGrade() != null ? (post.getGrade() + gradeDto.getGrade()) / 2 : gradeDto.getGrade();
         post.setGrade(grade);
         save(post);
 
@@ -82,7 +86,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<PostDto> getPopularPosts(Integer perPage) {
         Pageable limit = new PageRequest(0, perPage, Sort.Direction.DESC, "grade");
-        Page<Post> popularPosts = postRepository.findAll(limit);
+        Specification<Post> specification = PostSpecifications.searchByExistingGrade();
+        Page<Post> popularPosts = postRepository.findAll(specification, limit);
 
         return postMapper.toPagePostDto(popularPosts);
     }

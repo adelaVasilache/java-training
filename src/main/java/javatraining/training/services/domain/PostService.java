@@ -33,4 +33,6 @@ public interface PostService {
 
     Page<PostDto> getAllForMonth(Integer year, Integer month, Pageable pageable) throws ParseException;
 
+    Long countPostsByTitle(String title);
+
 }
