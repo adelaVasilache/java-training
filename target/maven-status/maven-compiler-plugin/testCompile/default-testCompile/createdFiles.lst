@@ -1,0 +1,8 @@
+javatraining/training/factories/TagFactory.class
+javatraining/training/factories/PostFactory.class
+javatraining/training/ApplicationTests.class
+javatraining/training/factories/ImageFactory.class
+javatraining/training/services/domain/PostServiceTest.class
+javatraining/training/services/business/PostBusinessServiceTest.class
+javatraining/training/factories/UserFactory.class
+javatraining/training/constants/UserConstants.class
