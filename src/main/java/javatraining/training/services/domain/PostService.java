@@ -27,7 +27,7 @@ public interface PostService {
 
     Page<PostDto> getLatestPosts(Integer perPage);
 
-    PostDto ratePost(GradeDto gradeDto) throws NotFoundException;
+    PostDto ratePost(GradeDto gradeDto, User user) throws NotFoundException;
 
     Page<PostDto> getPopularPosts(Integer perPage);
 

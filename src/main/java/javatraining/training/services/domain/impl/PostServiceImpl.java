@@ -5,8 +5,10 @@ import javatraining.training.dtos.GradeDto;
 import javatraining.training.dtos.PostDto;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.mappers.CommentMapper;
+import javatraining.training.mappers.GradeMapper;
 import javatraining.training.mappers.PostMapper;
 import javatraining.training.models.Comment;
+import javatraining.training.models.Grade;
 import javatraining.training.models.Post;
 import javatraining.training.models.User;
 import javatraining.training.repositories.specs.PostSpecifications;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.Sort;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by Adela Vasilache on 23.04.2018
@@ -34,13 +37,17 @@ public class PostServiceImpl implements PostService {
     private final CommentMapper commentMapper;
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+    private final GradeMapper gradeMapper;
     private static final Integer FIRST_DAY= 1;
+    private static final String GRADE = "grade";
+    private static final String CREATED = "created";
 
     @Autowired
     public PostServiceImpl(PostRepository postRepository) {
         this.postMapper = PostMapper.INSTANCE;
         this.commentMapper = CommentMapper.INSTANCE;
         this.postRepository = postRepository;
+        this.gradeMapper = GradeMapper.INSTANCE;
     }
 
     @Override
@@ -66,18 +73,19 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getLatestPosts(Integer perPage) {
-        Pageable limit = new PageRequest(0, perPage, Sort.Direction.DESC, "created");
+        Pageable limit = new PageRequest(0, perPage, Sort.Direction.DESC, CREATED);
         Page<Post> latestPosts = postRepository.findAll(limit);
 
         return postMapper.toPagePostDto(latestPosts);
     }
 
     @Override
-    public PostDto ratePost(GradeDto gradeDto) throws NotFoundException {
+    public PostDto ratePost(GradeDto gradeDto, User user) throws NotFoundException {
         Post post = postRepository.findById(gradeDto.getPostId()).orElseThrow(() ->
                 new NotFoundException(gradeDto.getPostId().toString()));
-        Double grade = post.getGrade() != null ? (post.getGrade() + gradeDto.getGrade()) / 2 : gradeDto.getGrade();
-        post.setGrade(grade);
+        logGrade(post, user, gradeDto);
+        Double newGrade = calculateNewGrade(post, gradeDto);
+        post.setGrade(newGrade);
         save(post);
 
         return postMapper.toPostDto(post);
@@ -85,7 +93,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostDto> getPopularPosts(Integer perPage) {
-        Pageable limit = new PageRequest(0, perPage, Sort.Direction.DESC, "grade");
+        Pageable limit = new PageRequest(0, perPage, Sort.Direction.DESC, GRADE);
         Specification<Post> specification = PostSpecifications.searchByExistingGrade();
         Page<Post> popularPosts = postRepository.findAll(specification, limit);
 
@@ -105,5 +113,17 @@ public class PostServiceImpl implements PostService {
     @Override
     public void save(Post post) {
         postRepository.save(post);
+    }
+
+    private void logGrade(Post post, User user, GradeDto gradeDto ){
+        Set<Grade> grades = post.getGrades();
+        grades.add(gradeMapper.toGrade(gradeDto, post, user));
+        post.setGrades(grades);
+    }
+
+    private Double calculateNewGrade(Post post, GradeDto gradeDto){
+        Double postGradesSum = post.getGrades().stream().mapToDouble(Grade::getGrade).sum();
+        return post.getGrade() != null ? postGradesSum  / post.getGrades().size()
+                : gradeDto.getGrade();
     }
 }

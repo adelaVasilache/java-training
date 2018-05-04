@@ -59,7 +59,7 @@ public class PostController {
 
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
     public ResponseEntity<PostDto> ratePost(@RequestBody @Valid GradeDto gradeDto) throws NotFoundException {
-        return new ResponseEntity<>(postService.ratePost(gradeDto), HttpStatus.OK);
+        return new ResponseEntity<>(postBusinessService.ratePost(gradeDto, SecurityContextHolder.getContext().getAuthentication()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/popular/{perPage}")
@@ -69,7 +69,7 @@ public class PostController {
 
     @RequestMapping(value = "/all/{year}/{month}", method = RequestMethod.GET)
     public ResponseEntity<Page<PostDto>> getForMonth(@PathVariable Integer year, @PathVariable Integer month) throws ParseException {
-        return new ResponseEntity<>(postService.getAllForMonth(year, month, new PageRequest(0, 10)), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getAllForMonth(year, month, new PageRequest(0, 2)), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)

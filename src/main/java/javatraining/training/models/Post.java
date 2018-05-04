@@ -65,6 +65,10 @@ public class Post {
             mappedBy = "post", orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "post", orphanRemoval = true)
+    private Set<Grade> grades = new HashSet<>();
+
     @ManyToOne
     private User user;
 

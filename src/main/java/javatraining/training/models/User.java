@@ -46,4 +46,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "user", orphanRemoval = true)
     private Set<Comment> comments;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "user", orphanRemoval = true)
+    private Set<Comment> grades;
 }

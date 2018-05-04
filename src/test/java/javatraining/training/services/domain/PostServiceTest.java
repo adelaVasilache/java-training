@@ -40,7 +40,6 @@ import static org.junit.Assert.assertThat;
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SqlGroup({
         @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:beforeTestRun.sql"),
-        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:afterTestRun.sql")
 })
 @Transactional
 public class PostServiceTest {
@@ -78,24 +77,6 @@ public class PostServiceTest {
         CommentDto commentDto = CommentFactory.createCommentDto(4L);
         User user = UserFactory.createUser();
         postService.addComment(commentDto, user);
-    }
-
-    @Test
-    public void ratePostTest() throws NotFoundException {
-        GradeDto gradeDto = GradeFactory.createGradeDto();
-        postService.ratePost(gradeDto);
-
-        GradeDto gradeDtoFirstGrade = GradeFactory.createGradeDto(3L);
-        postService.ratePost(gradeDtoFirstGrade);
-
-        assertEquals(postService.findPostById(1L).getGrade(), Double.valueOf(9L));
-        assertEquals(postService.findPostById(3L).getGrade(), Double.valueOf(10));
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void ratePostShouldThrowNotFoundException() throws NotFoundException {
-        GradeDto gradeDto = GradeFactory.createGradeDto(7L);
-        postService.ratePost(gradeDto);
     }
 
     @Test

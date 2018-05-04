@@ -36,7 +36,6 @@ import static org.junit.Assert.assertEquals;
 @TestPropertySource(locations = "classpath:application-test.properties")
 @SqlGroup({
         @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:beforeTestRun.sql"),
-        @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:afterTestRun.sql")
 })
 @Transactional
 public class PostBusinessServiceTest {
@@ -74,16 +73,6 @@ public class PostBusinessServiceTest {
         postDto.setGrade(8d);
         Authentication auth = new UsernamePasswordAuthenticationToken(UserConstants.EMAIL, UserConstants.PASSWORD);
         postBusinessService.addPost(postDto, auth);
-    }
-
-    @Test
-    public void editPostTest() throws UserRightsException, InvalidDataException, NotFoundException, GradeException {
-        PostDto postDto = PostFactory.createPostDto("test post edited", "test content");
-        postDto.setPostId(1L);
-        Authentication auth = new UsernamePasswordAuthenticationToken(UserConstants.EMAIL, UserConstants.PASSWORD);
-        postBusinessService.editPost(postDto, auth);
-
-        assertEquals(postService.countPostsByTitle("test post edited"), Long.valueOf(1));
     }
 
     @Test(expected = UserRightsException.class)

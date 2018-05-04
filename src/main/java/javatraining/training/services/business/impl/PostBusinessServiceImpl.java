@@ -1,6 +1,7 @@
 package javatraining.training.services.business.impl;
 
 import javatraining.training.dtos.CommentDto;
+import javatraining.training.dtos.GradeDto;
 import javatraining.training.dtos.PostDto;
 import javatraining.training.exceptions.DuplicatePostException;
 import javatraining.training.exceptions.GradeException;
@@ -87,6 +88,13 @@ public class PostBusinessServiceImpl implements PostBusinessService {
         User user = userService.getUserByEmail(authentication.getPrincipal().toString());
 
         return postService.addComment(commentDto, user);
+    }
+
+    @Override
+    public PostDto ratePost(GradeDto gradeDto, Authentication authentication) throws NotFoundException {
+        User user = userService.getUserByEmail(authentication.getPrincipal().toString());
+
+        return postService.ratePost(gradeDto, user);
     }
 
 }
