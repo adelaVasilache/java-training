@@ -53,7 +53,9 @@ public class PostBusinessServiceImpl implements PostBusinessService {
         }
             Post post = postMapper.setProperties(postDto, user, null);
             post.setTags(tagsService.addTagsThatDontExist(post.getTags()));
-            post.setImages(imageService.addImagesThatDontExist(post.getImages()));
+          if(post.getImages() != null) {
+              post.setImages(imageService.addImagesThatDontExist(post.getImages()));
+          }
             try {
                 postService.save(post);
             } catch (Exception e) {

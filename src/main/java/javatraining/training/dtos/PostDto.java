@@ -34,10 +34,11 @@ public class PostDto {
     @NotEmpty
     private String content;
 
-    @Size(min = 1)
+    @NotNull
     @Valid
     private Set<TagDto> tags;
 
+    @Valid
     private Set<ImageDto> images;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
