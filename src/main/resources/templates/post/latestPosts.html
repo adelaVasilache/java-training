@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+    <meta name="_csrf" th:if="${_csrf != null}" th:attr="content=${_csrf.token}"/>
+    <meta name="_csrf_header" th:if="${_csrf != null}" th:attr="content=${_csrf.headerName}"/>
+    <title>Layout page</title>
+    <script src="common-script.js"></script>
+</head>
+<body>
+<div class="header width-100">
+    <div class="navigation-container">
+        <div th:replace="~{#{header}}"></div>
+    </div>
+</div>
+<section layout:fragment="content">
+    <p>Page content goes here</p>
+</section>
+<footer>
+    <p>My footer</p>
+    <p layout:fragment="custom-footer">Custom footer here</p>
+</footer>
+</body>
+</html>
