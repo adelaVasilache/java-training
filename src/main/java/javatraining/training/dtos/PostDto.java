@@ -26,7 +26,7 @@ import java.util.Set;
 @Builder
 public class PostDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Long postId;
+    private Long id;
 
     @NotEmpty
     private String title;
@@ -43,5 +43,9 @@ public class PostDto {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double grade;
+
+    public String toString(){
+        return "id: " + this.id + " title: " + this.getTitle();
+    }
 
 }

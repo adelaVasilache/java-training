@@ -1,0 +1,88 @@
+.error {
+    color: #a94442;
+}
+
+input.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border: solid 1px #ebccd1;
+}
+
+body {
+    font-family: 'Oswald', sans-serif;
+    padding: 0 !important;
+}
+
+.header {
+    width: 100%;
+    background: #000000;
+}
+
+.header .navbar ul li a {
+    font-size: 16px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+    padding: 0 15px;
+    border-right: 2px solid #474747;
+}
+
+.header .navbar ul li a:hover,
+.header .navbar ul li a:focus, .header .navbar a.selected {
+    color: #eece6c;
+    background: transparent;
+}
+
+.navbar {
+    margin-bottom: 0px !important;
+}
+
+.navbar-right {
+    margin-top: -13px;
+!important;
+}
+
+.header .navbar .navbar-header .navbar-brand {
+    height: 80px;
+    padding: 10px 0 0;
+    outline: none;
+}
+
+.header .navbar .navbar-header .navbar-brand img {
+    height: 100%;
+}
+
+.header .navbar ul.main-nav {
+    padding: 38px 0 0 20px;
+}
+
+.custom-container {
+    width: 70%;
+}
+
+.navigation-container {
+    width: 80%;
+    height: 80%;
+    color: white;
+    margin: 0 auto;
+}
+
+#post-list{
+    list-style-type: none;
+    width: 60%;
+}
+
+#post-list li{
+    margin-top: 120px;
+    margin-bottom: 20px;
+}
+
+.row {text-align: center}
+
+#post-title{
+    font-weight: bold;
+}
+
+#rate-post{
+    margin-top:55px;
+}

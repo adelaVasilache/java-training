@@ -32,4 +32,8 @@ public class CommentDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date created;
+
+    public String toString(){
+        return "postId: " + this.getPostId() + " content: " + this.getContent();
+    }
 }

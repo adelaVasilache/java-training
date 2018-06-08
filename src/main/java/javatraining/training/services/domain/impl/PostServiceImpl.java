@@ -55,8 +55,15 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id).orElseThrow(() -> new NotFoundException(id.toString()));
     }
 
+    @Override
     public Long countPostsByTitle(String title){
         return postRepository.countByTitle(title);
+    }
+
+    @Override
+    public Long countPostsById(Long id){
+        Long count = postRepository.countById(id);
+        return count;
     }
 
     @Override
@@ -80,10 +87,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto ratePost(GradeDto gradeDto, User user) throws NotFoundException {
-        Post post = postRepository.findById(gradeDto.getPostId()).orElseThrow(() ->
-                new NotFoundException(gradeDto.getPostId().toString()));
-        logGrade(post, user, gradeDto);
+    public PostDto ratePost(GradeDto gradeDto, User user, boolean loggedUser) throws NotFoundException {
+        Post post = postRepository.findById(Long.parseLong(gradeDto.getPostId())).orElseThrow(() ->
+                new NotFoundException(gradeDto.getPostId()));
+        logGrade(post, user, gradeDto, loggedUser);
         Double newGrade = calculateNewGrade(post, gradeDto);
         post.setGrade(newGrade);
         save(post);
@@ -115,10 +122,21 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
 
-    private void logGrade(Post post, User user, GradeDto gradeDto ){
+    private void logGrade(Post post, User user, GradeDto gradeDto, boolean loggedUser ){
         Set<Grade> grades = post.getGrades();
-        grades.add(gradeMapper.toGrade(gradeDto, post, user));
-        post.setGrades(grades);
+        if(loggedUser) {
+            grades.add(gradeMapper.toGradeWithUser(gradeDto, post, user));
+            post.setGrades(grades);
+            return;
+        }
+        grades.add(gradeMapper.toGradeWithoutUser(gradeDto, post));
+    }
+
+    @Override
+    public List<PostDto> getAllLike(String like){
+        Specification<Post> specification = PostSpecifications.hasNameOrShortDescriptionLike(like);
+        List<Post> list =  postRepository.findAll(specification);
+        return postMapper.toPostDtoList(list);
     }
 
     private Double calculateNewGrade(Post post, GradeDto gradeDto){

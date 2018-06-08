@@ -22,7 +22,7 @@ import java.util.Date;
 @Builder
 public class GradeDto {
     @NotNull
-    private Long postId;
+    private String postId;
 
     @NotNull
     @Range(min = 0, max = 10)
@@ -32,4 +32,8 @@ public class GradeDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date created;
+
+    public String toString(){
+        return "postId: " + this.postId + "grade:" + this.grade;
+    }
 }

@@ -12,6 +12,16 @@ import java.util.Date;
  */
 @NoArgsConstructor
 public class PostSpecifications {
+
+    public static Specification<Post> hasNameOrShortDescriptionLike(String like) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            String containsLikePattern = getContainsLikePattern(like);
+            return criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get(Post_.title)), containsLikePattern)
+            );
+        };
+    }
+
     public static Specification<Post> seachBySubmitDate(final Date startDate, final Date endDate) {
         return (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.between(root.get(Post_.created), startDate, endDate);
@@ -21,4 +31,12 @@ public class PostSpecifications {
         return ((root, criteriaQuery, criteriaBuilder) ->
         criteriaBuilder.isTrue(root.get(Post_.grade).isNotNull()));
     }
+
+    private static String getContainsLikePattern(String title) {
+        if (title == null || title.isEmpty()) {
+            return "%";
+        }
+        return "%" + title.toLowerCase() + "%";
+    }
+
 }

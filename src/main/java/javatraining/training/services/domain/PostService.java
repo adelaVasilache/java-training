@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,12 +28,16 @@ public interface PostService {
 
     Page<PostDto> getLatestPosts(Integer perPage);
 
-    PostDto ratePost(GradeDto gradeDto, User user) throws NotFoundException;
+    PostDto ratePost(GradeDto gradeDto, User user, boolean loggedUser) throws NotFoundException;
 
     Page<PostDto> getPopularPosts(Integer perPage);
 
     Page<PostDto> getAllForMonth(Integer year, Integer month, Pageable pageable) throws ParseException;
 
     Long countPostsByTitle(String title);
+
+    Long countPostsById(Long id);
+
+    List<PostDto> getAllLike(String like);
 
 }

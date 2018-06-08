@@ -9,6 +9,7 @@ import javatraining.training.exceptions.InvalidDataException;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.exceptions.UserRightsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -24,4 +25,6 @@ public interface PostBusinessService {
     PostDto ratePost(GradeDto gradeDto, Authentication authentication) throws NotFoundException;
 
     PostDto editPost(PostDto postDto, Authentication authentication) throws NotFoundException, UserRightsException, InvalidDataException, GradeException;
+
+    void addFile(MultipartFile file, String postId) throws NotFoundException;
 }

@@ -78,7 +78,7 @@ public class PostBusinessServiceTest {
     @Test(expected = UserRightsException.class)
     public void editPostShouldThrowUserRightsException() throws UserRightsException, InvalidDataException, NotFoundException, GradeException {
         PostDto postDto = PostFactory.createPostDto("test post edited", "test content");
-        postDto.setPostId(1L);
+        postDto.setId(1L);
         Authentication auth = new UsernamePasswordAuthenticationToken(UserConstants.EMAIL_WRONG, UserConstants.PASSWORD);
         postBusinessService.editPost(postDto, auth);
     }
@@ -86,7 +86,7 @@ public class PostBusinessServiceTest {
     @Test(expected = NotFoundException.class)
     public void editPostShouldThrowNotFoundException() throws UserRightsException, InvalidDataException, NotFoundException, GradeException {
         PostDto postDto = PostFactory.createPostDto("test post edited", "test content");
-        postDto.setPostId(10L);
+        postDto.setId(10L);
         Authentication auth = new UsernamePasswordAuthenticationToken(UserConstants.EMAIL_WRONG, UserConstants.PASSWORD);
         postBusinessService.editPost(postDto, auth);
     }

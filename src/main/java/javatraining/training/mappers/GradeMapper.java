@@ -20,12 +20,20 @@ public abstract class GradeMapper {
 
     public abstract void copyProperties(GradeDto commentDto, @MappingTarget Grade comment);
 
-    public Grade toGrade(GradeDto gradeDto, Post post, User user){
+    public Grade toGradeWithUser(GradeDto gradeDto, Post post, User user) {
         Grade grade = new Grade();
         copyProperties(gradeDto, grade);
         grade.setCreated(new Date());
         grade.setPost(post);
         grade.setUser(user);
+        return grade;
+    }
+
+    public Grade toGradeWithoutUser(GradeDto gradeDto, Post post) {
+        Grade grade = new Grade();
+        copyProperties(gradeDto, grade);
+        grade.setCreated(new Date());
+        grade.setPost(post);
         return grade;
     }
 }

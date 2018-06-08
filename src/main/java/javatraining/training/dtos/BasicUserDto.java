@@ -28,4 +28,8 @@ public class BasicUserDto {
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
+
+    public String toString(){
+        return this.email;
+    }
 }
