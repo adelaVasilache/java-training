@@ -57,6 +57,10 @@ input.error {
     margin-left:10px;
 }
 
+.list-unstyled li a, p {
+color: black !important;
+}
+
 
 /*
     DEMO STYLE
@@ -126,7 +130,8 @@ a, a:hover, a:focus {
 
 #sidebar .sidebar-header {
    /*padding: 20px;*/
-    background: #6d7fcc;
+    /*background: #6d7fcc;*/
+    color: black !important;
 }
 
 #sidebar ul.components {
@@ -150,8 +155,7 @@ a, a:hover, a:focus {
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
+    color: #000000;
 }
 
 
@@ -176,6 +180,7 @@ ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
     background: #6d7fcc;
+    color:#000000 !important;
 }
 
 ul.CTAs {
@@ -190,12 +195,12 @@ ul.CTAs a {
     margin-bottom: 5px;
 }
 
-a.download {
-    background: #fff;
-    color: #7386D5;
-}
+/*a.download {*/
+    /*background: #fff;*/
+    /*color: #7386D5;*/
+/*}*/
 
-a.article, a.article:hover {
+a.article, a.download {
     background: #6d7fcc !important;
     color: #fff !important;
 }
