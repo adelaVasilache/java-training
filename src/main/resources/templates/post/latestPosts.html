@@ -4,27 +4,63 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script src="/static/jquery/jquery.js"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
     <script src="/static/js/postScript.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Bootstrap Sidebar</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Dummy Heading</p>
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li><a href="#">Home 1</a></li>
+                        <li><a href="#">Home 2</a></li>
+                        <li><a href="#">Home 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li><a href="#">Page 1</a></li>
+                        <li><a href="#">Page 2</a></li>
+                        <li><a href="#">Page 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
+                <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+            </ul>
+        </nav>
+
    <ul id="post-list">
        <li th:each="post : ${latestPosts}">
            <div id="post-title" class="row" th:text="${post.getTitle()}"></div>
            <div class="row" th:text="${post.getContent()}"></div>
-           <div class="navbar navbar-left" id="post-grade">
-               <p class="navbar-text">Post grade:</p>
-               <p class="navbar-text" th:text="${post.getGrade()}"></p>
-           </div>
-           <div class="navbar-form navbar-left" id="rate-post">
-               <p class="navbar-text">Rate this post!</p>
-               <button type="submit" class="btn btn-default btn-rate" value=1>1</button>
-               <button type="submit" class="btn btn-default btn-rate" value=2>2</button>
-               <button type="submit" class="btn btn-default btn-rate" value=3>3</button>
-               <button type="submit" class="btn btn-default btn-rate" value=4>4</button>
-               <button type="submit" class="btn btn-default btn-rate" value=5>5</button>
-               <input type="hidden" class="post-id" th:value = "${post.getId()}">
-           </div>
+           <div th:replace="~{#{post.grade}}"></div>
+           <ul id="rating" th:data-id="${post.getId()}">
+               <li class="grade">I didn't like this at all</li>
+               <li class="grade">Nothing too new or interesting</li>
+               <li class="grade">Not bad, I like it</li>
+               <li class="grade">I would like to see more of this</li>
+               <li class="grade">This is the best thing I've seen</li>
+           </ul>
        </li>
    </ul>
 </div>
