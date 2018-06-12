@@ -1,4 +1,0 @@
-<div class="navbar navbar-left" id="post-grade" th:fragment="postGrade">
-    <p class="navbar-text">Post grade:</p>
-    <p class="navbar-text" th:with="grade=${post.getGrade()}" th:text="${#numbers.formatDecimal(grade, 0, 2)}"></p>
-</div>

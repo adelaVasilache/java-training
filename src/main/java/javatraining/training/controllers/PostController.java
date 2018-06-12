@@ -68,12 +68,9 @@ public class PostController {
     }
 
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
-    public @ResponseBody PostDto ratePost(@RequestBody @Valid GradeDto gradeDto, Model model) throws NotFoundException {
-        model.addAttribute("gradedPost", postBusinessService.ratePost(gradeDto,
-                SecurityContextHolder.getContext().getAuthentication()));
-
-        return postBusinessService.ratePost(gradeDto, SecurityContextHolder.getContext().getAuthentication());
-//        return templatePath.getTemplate("post.latest");
+    public @ResponseBody String ratePost(@RequestBody @Valid GradeDto gradeDto, Model model) throws NotFoundException {
+        return postBusinessService.ratePost(gradeDto,
+                SecurityContextHolder.getContext().getAuthentication()).getGrade().toString();
     }
 
     @RequestMapping(value = "/popular/{perPage}", method = RequestMethod.GET)

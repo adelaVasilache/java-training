@@ -16,36 +16,49 @@ input.error {
     margin-top: -25px;
 }
 
-#post-list{
-    list-style-type: none;
+.post-list{
+    list-style-type: none !important;
     width: 60%;
 }
 
-#post-list li{
+.post-list li{
     margin-top: 50px;
     margin-bottom: 20px;
 }
 
 .row {text-align: center}
 
-#post-title{
+.post-title{
     font-weight: bold;
-    margin-top:30px;
+    margin-top:100px;
 }
 
-#rate-post{
+.rate-post{
     margin-top:55px;
 }
 
-#post-grade {
+.post-grade-div {
     background-color: #ffffff !important;
     margin-top:18px;
     padding: 11px 10px !important;
 }
 
-#rating { list-style:none; }
-#rating li { display:inline; float:left; }
-#rating li { display:block; width:30px; height:30px; border:1px solid #888; background-color:#333;
+.comment {
+    margin-top:43px;
+}
+
+#comment-modal{
+    display: none;
+}
+
+#text-comment{
+    width:370px;
+}
+
+.rating { list-style:none;
+    margin-left:200px;}
+.rating li { display:inline; float:left; }
+.rating li { display:block; width:30px; height:30px; border:1px solid #888; background-color:#333;
     text-indent:-9999px; box-shadow:0 0 5px #888; border-radius:40px; }
 
 #ratinginfo { clear:left; width:350px;

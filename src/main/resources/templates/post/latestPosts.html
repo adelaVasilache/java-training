@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
     <script src="/static/jquery/jquery.js"></script>
     <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     <script src="/static/js/postScript.js"></script>
 </head>
 <body>
@@ -49,12 +51,22 @@
             </ul>
         </nav>
 
-   <ul id="post-list">
+   <ul class="post-list">
        <li th:each="post : ${latestPosts}">
-           <div id="post-title" class="row" th:text="${post.getTitle()}"></div>
+           <div class="row post-title" th:text="${post.getTitle()}"></div>
            <div class="row" th:text="${post.getContent()}"></div>
-           <div th:replace="~{#{post.grade}}"></div>
-           <ul id="rating" th:data-id="${post.getId()}">
+           <div class="navbar navbar-left post-grade-div">
+               <p class="navbar-text">Post grade:</p>
+               <p class="navbar-text grade" th:with="grade=${post.getGrade()}" th:text="${#numbers.formatDecimal(grade, 0, 2)}"></p>
+           </div>
+           <div class = "comment pull-right">
+           <button class="btn btn-outline-success btn-comment" type="button" th:data-id="${post.getId()}">Add a comment</button>
+               <div class="modal-content" id="comment-modal">
+                   <textarea id="text-comment"></textarea>
+                   <button class="btn-post-comment btn-outline-success" type="button">Post</button>
+               </div>
+           </div>
+           <ul class="rating" th:data-id="${post.getId()}">
                <li class="grade">I didn't like this at all</li>
                <li class="grade">Nothing too new or interesting</li>
                <li class="grade">Not bad, I like it</li>
