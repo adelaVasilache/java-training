@@ -32,6 +32,15 @@ public abstract class CommentMapper {
         return comment;
     }
 
+    public Comment toCommentWithoutUser(CommentDto commentDto, Post post) {
+        Comment comment = new Comment();
+        copyProperties(commentDto, comment);
+        comment.setCreated(new Date());
+        comment.setPost(post);
+
+        return comment;
+    }
+
     public abstract void copyProperties(Set<Comment> comment, @MappingTarget Set<CommentDto> commentDto);
 
     public Set<CommentDto> toCommentDtoList(Set<Comment> commentList) {

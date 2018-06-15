@@ -24,7 +24,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,6 +59,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PostDto getPostById(Long id) throws NotFoundException {
+        Post post = findPostById(id);
+        return postMapper.toPostDto(post);
+    }
+
+    @Override
     public Long countPostsByTitle(String title){
         return postRepository.countByTitle(title);
     }
@@ -67,15 +76,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Set<CommentDto> addComment(CommentDto commentDto, User user) throws NotFoundException {
+    public Integer addComment(CommentDto commentDto, User user, boolean loggedUser) throws NotFoundException {
         Post post = postRepository.findById(commentDto.getPostId()).orElseThrow(
                 () -> new NotFoundException(commentDto.getPostId().toString()));
         Set<Comment> comments = post.getComments();
-        comments.add(commentMapper.toComment(commentDto, post, user));
+        if(loggedUser) {
+            comments.add(commentMapper.toComment(commentDto, post, user));
+            post.addComments(comments);
+            save(post);
+
+            return post.getComments().size();
+        }
+        comments.add(commentMapper.toCommentWithoutUser(commentDto, post));
         post.addComments(comments);
         save(post);
 
-        return commentMapper.toCommentDtoList(post.getComments());
+        return post.getComments().size();
     }
 
     @Override
@@ -139,9 +155,23 @@ public class PostServiceImpl implements PostService {
         return postMapper.toPostDtoList(list);
     }
 
+    @Override
+    public List<String> getAllMonths() {
+        List<String> monthsList = new ArrayList<>();
+        String[] months = new DateFormatSymbols().getMonths();
+        monthsList.addAll(Arrays.asList(months));
+        return monthsList;
+    }
+
+    @Override
+    public List<String> getYears() {
+        return Arrays.asList("2018", "2017", "2016");
+    }
+
     private Double calculateNewGrade(Post post, GradeDto gradeDto){
         Double postGradesSum = post.getGrades().stream().mapToDouble(Grade::getGrade).sum();
         return post.getGrade() != null ? postGradesSum  / post.getGrades().size()
                 : gradeDto.getGrade();
     }
+
 }

@@ -2,12 +2,14 @@
 <html layout:decorate="~{#{layout.main}}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
     <script src="/static/jquery/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-    <script src="/static/js/postScript.js"></script>
+    <script src="/static/js/postListScript.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -15,30 +17,18 @@
         <!-- Sidebar Holder -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Bootstrap Sidebar</h3>
+                <h2>Fast Search</h2>
             </div>
 
             <ul class="list-unstyled components">
-                <p>Dummy Heading</p>
-                <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li><a href="#">Home 1</a></li>
-                        <li><a href="#">Home 2</a></li>
-                        <li><a href="#">Home 3</a></li>
-                    </ul>
+                <li>
+                    <a href="#">Add a post</a>
                 </li>
                 <li>
-                    <a href="#">About</a>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li><a href="#">Page 1</a></li>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
-                    </ul>
+                    <a href="#">Most popular posts</a>
                 </li>
                 <li>
-                    <a href="#">Portfolio</a>
+                    <a href="#">Find by tags</a>
                 </li>
                 <li>
                     <a href="#">Contact</a>
@@ -46,35 +36,76 @@
             </ul>
 
             <ul class="list-unstyled CTAs">
-                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
-                <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
-            </ul>
+                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Create account</a></li>
+                  </ul>
         </nav>
-
    <ul class="post-list">
-       <li th:each="post : ${latestPosts}">
-           <div class="row post-title" th:text="${post.getTitle()}"></div>
+       <li class="post-item" th:each="post,iter : ${latestPosts}">
+           <div class="row post-title">
+               <a th:with="postId=${post.getId()}" th:href="@{/post/content/} + ${postId}" th:text="${post.getTitle()}"></a>
+           </div>
            <div class="row" th:text="${post.getContent()}"></div>
+           <!--<div class="pull-left">-->
+               <!--<p th:text="${post.getNumberOfComments()} + ' comments'"></p>-->
+           <!--</div>-->
            <div class="navbar navbar-left post-grade-div">
+               <p class="comments-number" th:text="${post.getNumberOfComments()} + ' comments'"
+                  th:for="|post${iter.index}|" th:data-index="${iter.index}"></p>
                <p class="navbar-text">Post grade:</p>
-               <p class="navbar-text grade" th:with="grade=${post.getGrade()}" th:text="${#numbers.formatDecimal(grade, 0, 2)}"></p>
+               <p class="navbar-text post-grade" th:with="grade=${post.getGrade()}"
+                  th:text="${#numbers.formatDecimal(grade, 0, 2)}"></p>
            </div>
            <div class = "comment pull-right">
-           <button class="btn btn-outline-success btn-comment" type="button" th:data-id="${post.getId()}">Add a comment</button>
-               <div class="modal-content" id="comment-modal">
-                   <textarea id="text-comment"></textarea>
-                   <button class="btn-post-comment btn-outline-success" type="button">Post</button>
+           <button class="btn btn-outline-success btn-comment" type="button" data-toggle="modal"
+                   th:data-target="'#myModal' + ${iter.index}" th:data-id="${post.getId()}">Add a comment</button>
+               <div class="modal fade comment-modal" th:id="'myModal' + ${iter.index}" tabindex="-1"
+                    role="dialog" aria-labelledby="myModalLabel">
+                   <div class="modal-dialog" role="document">
+                       <div class="modal-content">
+                           <div class="modal-header">
+                               <button type="button" class="close" data-dismiss="modal"
+                                       aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                               <h4 class="modal-title" id="myModalLabel">Post a comment</h4>
+                           </div>
+                           <div class="modal-body">
+                               <textarea class="comment-content"></textarea>
+                           </div>
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                               <button type="button" class="btn-post-comment btn-primary" data-dismiss="modal" th:data-id="${post.getId()}"
+                                       th:for="|post${iter.index}|" th:data-index="${iter.index}">Post</button>
+                           </div>
+                       </div>
+                   </div>
                </div>
            </div>
            <ul class="rating" th:data-id="${post.getId()}">
-               <li class="grade">I didn't like this at all</li>
-               <li class="grade">Nothing too new or interesting</li>
-               <li class="grade">Not bad, I like it</li>
-               <li class="grade">I would like to see more of this</li>
-               <li class="grade">This is the best thing I've seen</li>
+               <li th:data-index="${iter.index}" class="grade">I didn't like this at all</li>
+               <li th:data-index="${iter.index}" class="grade">Nothing too new or interesting</li>
+               <li th:data-index="${iter.index}" class="grade">Not bad, I like it</li>
+               <li th:data-index="${iter.index}" class="grade">I would like to see more of this</li>
+               <li th:data-index="${iter.index}" class="grade">This is the best thing I've seen</li>
            </ul>
        </li>
    </ul>
+
+        <!--/span-->
+        <div class="col-md-3">
+            <div class="sidebar-nav pull-right affix">
+                <div class="well">
+                    <ul class="nav ">
+                        <li class="nav-header months-list"> <h2>Older posts</h2></li>
+                        <li class = "years-list"><h3>Years</h3></li>
+                        <li class = "year" th:each="year : ${years}" th:text="${year}">
+                        <li class = "years-list"><h3>Months</h3></li>
+                        <li class="month" th:each="month : ${months}" th:text="${month}">
+                    </ul>
+                </div>
+                <!--/.well -->
+            </div>
+            <!--/sidebar-nav-fixed -->
+        </div>
+
 </div>
 </body>
 </html>

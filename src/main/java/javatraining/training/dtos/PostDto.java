@@ -14,6 +14,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,6 +44,10 @@ public class PostDto {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double grade;
+
+    private Integer numberOfComments;
+
+    private Set<CommentDto> comments;
 
     public String toString(){
         return "id: " + this.id + " title: " + this.getTitle();

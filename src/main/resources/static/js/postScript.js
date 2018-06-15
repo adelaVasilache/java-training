@@ -1,104 +1,47 @@
 $(document).ready(function () {
-    colorRatePost();
-    openCommentPopup();
+    console.log("test");
 });
 
-var rateUrl = "/post/rate";
-var latestUrl = "/post/latest/9";
+var commentUrl = "/post/comment";
 
-
-function colorRatePost() {
-    var animationTime = 100;
-    var colours = ["bd2c33", "e49420", "ecdb00", "3bad54", "1b7db9"];
-
-    // var ratingInfobox = $("<div />")
-    //     .attr("id", "ratinginfo")
-    //     .insertAfter($("ul").closest(".rating"));
-
-    var colourizeRatings = function (ratingLi) {
-        var nrOfRatings = $(ratingLi).index();
-
-        ratingLi.siblings().each(function () {
-            if ($(this).index() <= nrOfRatings) {
-                $(this).stop().animate({backgroundColor: "#" + colours[nrOfRatings]}, animationTime);
-            }
-        });
-    };
-
-    $(".rating li").hover(function () {
-        var ratingInfobox = $("<div />")
-            .attr("id", "ratinginfo")
-            .insertAfter($(this).parent());
-
-        ratingInfobox
-            .empty()
-            .stop()
-            .animate({opacity: 1}, animationTime);
-
-        $("<p />")
-            .html($(this).html())
-            .appendTo(ratingInfobox);
-
-        colourizeRatings($(this));
-    });
-    $(".rating li").click(function (e) {
-        e.preventDefault();
-        showToastrInfo();
-        var gradeDiv = $(this).parent().prev().find("#grade");
-        var dataObject = JSON.stringify({
-            postId: $(this).parent().attr('data-id'),
-            grade: $(this).index() + 1
-        });
-        $.ajax({
-            contentType: "application/json; charset=utf-8",
-            url: rateUrl,
-            type: "POST",
-            data: dataObject,
-            success: function (data) {
-                gradeDiv.text(data.substr(0, 4))
-            }
-        })
-    });
-}
-
-function showToastrInfo() {
-    toastr.success("Post rated!", "Title", {
-        "timeOut": "2000",
-        "extendedTImeout": "2000",
-        "closeButton": true
-    });
-}
-
-function openCommentPopup() {
-    $(".btn-comment").on("click", function(){
-
-    var width = 400;
-    var height = 100;
-
-    var center_left = (screen.width / 2) - (width / 2);
-    var center_top = (screen.height / 2) - (200);
-    var w = window.open("", "Title", "scrollbars=1, width="+width+", height="+height+", left="+center_left+", top="+center_top);
-    var $w = $(w.document.body);
-    $w.html($("#comment-modal").html());
-    })
-}
-
-$(".btn-post-comment").on("click", function() {
+$(document).on("click","#postComment", function () {
+    var content = $("#postContent");
+    var commentNumber = $("#comments-number");
     var dataObject = JSON.stringify({
-        content:$("#text-comment").val(),
-        postId:$(this).attr("data-id")
+        postId: $(content).attr("data-id"),
+        content: $(content).val()
     });
     $.ajax({
         contentType: "application/json; charset=utf-8",
-        url: rateUrl,
+        url: commentUrl,
         type: "POST",
         data: dataObject,
         success: function (data) {
-            console.log("success")
+            var dt = new Date();
+            var date = dt.getFullYear() + "-" + dt.getMonth() + "-" + dt.getDate() + " " + dt.getHours();
+            commentNumber.html(data + " comments");
+            $("#commentsList").prepend("<li class=\"list-group-item\">\n" +
+                "                        <div class=\"d-flex w-100 justify-content-between\">\n" +
+                "                            <h5 class=\"mb-1\">\n" +
+                "                                user:\n" +
+                "                            </h5>\n" +
+                "                            <p class=\"mb-1\">test</p>\n" +
+                "                            <small>"+ getCurrentTime()+"</small>\n" +
+                "                        </div>\n" +
+                "                    </li>");
         }
-    })
+    });
+});
 
-})
+function getCurrentTime(){
+    var dt = new Date(),
+        month = dt.getMonth() + 1,
+        day = dt.getDate(),
+        year = dt.getFullYear(),
+        hour = dt.getHours(),
+        minute = dt.getMinutes(),
+        second = dt.getSeconds(),
+        millisecond = dt.getMilliseconds();
 
-
-
+    return [year, month, day].join("-") +" "+ [hour, minute, second].join(":") + "." + millisecond;
+}

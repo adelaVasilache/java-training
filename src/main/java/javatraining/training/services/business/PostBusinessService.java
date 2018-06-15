@@ -8,6 +8,7 @@ import javatraining.training.exceptions.GradeException;
 import javatraining.training.exceptions.InvalidDataException;
 import javatraining.training.exceptions.NotFoundException;
 import javatraining.training.exceptions.UserRightsException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,11 +21,13 @@ public interface PostBusinessService {
 
     void addPost(PostDto postDto, Authentication authentication) throws NotFoundException, InvalidDataException, DuplicatePostException, GradeException;
 
-    Set<CommentDto> addComment(CommentDto commentDto, Authentication authentication) throws NotFoundException;
+    String addComment(CommentDto commentDto, Authentication authentication) throws NotFoundException;
 
     PostDto ratePost(GradeDto gradeDto, Authentication authentication) throws NotFoundException;
 
     PostDto editPost(PostDto postDto, Authentication authentication) throws NotFoundException, UserRightsException, InvalidDataException, GradeException;
 
     void addFile(MultipartFile file, String postId) throws NotFoundException;
+
+    //Page<PostDto> getLatestPosts(Integer perPage) throws NotFoundException;
 }

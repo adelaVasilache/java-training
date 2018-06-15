@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html layout:decorate="~{#{layout.main}}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+    <script src="/static/jquery/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+    <script src="/static/js/postScript.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h2>Fast Search</h2>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="#">Add a post</a>
+                </li>
+                <li>
+                    <a href="#">Most popular posts</a>
+                </li>
+                <li>
+                    <a href="#">Find by tags</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Create account</a></li>
+            </ul>
+        </nav>
+        <div class="post-content">
+            <div class="row text-center">
+                <h1 th:text="${post.getTitle()}"></h1>
+            </div>
+            <div class="row post-text" th:text="${post.getContent()}">
+            </div>
+            <div class="navbar navbar-left post-grade-div">
+                <p class="navbar-text post-grade-text">Post grade:</p>
+                <p class="navbar-text post-grade" th:with="grade=${post.getGrade()}"
+                   th:text="${#numbers.formatDecimal(grade, 0, 2)}"></p>
+                <p class="comments-number" >
+                    <a id="comments-number" href="#" th:text="${post.getNumberOfComments()} + ' comments'"> </a>
+                </p>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-10">
+                        <textarea th:data-id="${post.getId()}" id="postContent" class="form-control input-sm" rows="3" style="resize: none"></textarea>
+                    </div>
+                    <div class="col-xs-2">
+                        <button id="postComment" class="btn uk-button btn-block btn-default " ng-click="viewServiceNowPopup(formData_EventDetails)"> &nbsp;Post &nbsp;</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="comments-all">
+                <ul class="list-group comments-list" id="commentsList">
+                    <li class="list-group-item" th:each="comment : ${post.getComments()}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">
+                                user:
+                            </h5>
+                            <p class="mb-1" th:text="${comment.getContent()}"></p>
+                            <small th:text="${comment.getCreated()}"></small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="sidebar-nav pull-right affix">
+                <div class="well">
+                    <ul class="nav ">
+                        <li class="nav-header months-list"> <h2>Older posts</h2></li>
+                        <li class = "years-list"><h3>Years</h3></li>
+                        <li class = "year" th:each="year : ${years}" th:text="${year}">
+                        <li class = "years-list"><h3>Months</h3></li>
+                        <li class="month" th:each="month : ${months}" th:text="${month}">
+                    </ul>
+                </div>
+                <!--/.well -->
+            </div>
+            <!--/sidebar-nav-fixed -->
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

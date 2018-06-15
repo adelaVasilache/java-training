@@ -56,19 +56,23 @@ public class PostController {
     }
 
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Set<CommentDto> addComment(@RequestBody @Valid CommentDto commentDto) throws NotFoundException {
+    public @ResponseBody
+    String addComment(@RequestBody @Valid CommentDto commentDto) throws NotFoundException {
         return postBusinessService.addComment(commentDto, SecurityContextHolder.getContext().getAuthentication());
     }
 
     @RequestMapping(value = "/latest/{perPage}", method = RequestMethod.GET)
     public String getLatest(@PathVariable Integer perPage, Model model) {
         model.addAttribute("latestPosts", postService.getLatestPosts(perPage));
+        model.addAttribute("months", postService.getAllMonths());
+        model.addAttribute("years", postService.getYears());
 
         return templatePath.getTemplate("post.latest");
     }
 
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
-    public @ResponseBody String ratePost(@RequestBody @Valid GradeDto gradeDto, Model model) throws NotFoundException {
+    public @ResponseBody
+    String ratePost(@RequestBody @Valid GradeDto gradeDto, Model model) throws NotFoundException {
         return postBusinessService.ratePost(gradeDto,
                 SecurityContextHolder.getContext().getAuthentication()).getGrade().toString();
     }
@@ -89,13 +93,22 @@ public class PostController {
     }
 
     @RequestMapping(value = "/add/file/{postId}", method = RequestMethod.POST)
-    public ResponseEntity<HttpStatus> AddFile(@RequestParam("file")MultipartFile file, @PathVariable String postId) throws NotFoundException {
+    public ResponseEntity<HttpStatus> AddFile(@RequestParam("file") MultipartFile file, @PathVariable String postId) throws NotFoundException {
         postBusinessService.addFile(file, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/post/{like}", method = RequestMethod.GET)
-    public List<PostDto> test(@PathVariable String like){
+    public List<PostDto> test(@PathVariable String like) {
         return postService.getAllLike(like);
+    }
+
+    @RequestMapping(value = "/content/{postId}", method = RequestMethod.GET)
+    public String getPost(@PathVariable Long postId, Model model) throws NotFoundException {
+        model.addAttribute("post", postService.getPostById(postId));
+        model.addAttribute("months", postService.getAllMonths());
+        model.addAttribute("years", postService.getYears());
+
+        return templatePath.getTemplate("post.content");
     }
 }

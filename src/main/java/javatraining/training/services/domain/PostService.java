@@ -24,7 +24,7 @@ public interface PostService {
 
     void save(Post post);
 
-    Set<CommentDto> addComment(CommentDto commentDto, User user) throws NotFoundException;
+    Integer addComment(CommentDto commentDto, User user, boolean loggedUser) throws NotFoundException;
 
     Page<PostDto> getLatestPosts(Integer perPage);
 
@@ -39,5 +39,11 @@ public interface PostService {
     Long countPostsById(Long id);
 
     List<PostDto> getAllLike(String like);
+
+    List<String> getAllMonths();
+
+    List<String> getYears();
+
+    PostDto getPostById(Long id) throws NotFoundException;
 
 }

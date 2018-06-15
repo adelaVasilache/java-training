@@ -3,13 +3,16 @@ package javatraining.training.mappers;
 import javatraining.training.dtos.PostDto;
 import javatraining.training.models.Post;
 import javatraining.training.models.User;
+import org.hibernate.ObjectNotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,11 +38,26 @@ public abstract class PostMapper {
         return post;
     }
 
-    public abstract PostDto toPostDto(Post post);
+    public abstract void copyProperties(Post post, @MappingTarget PostDto postDto);
+
+    public PostDto toPostDto(Post post){
+        PostDto postDto = new PostDto();
+        copyProperties(post, postDto);
+        postDto.setNumberOfComments(post.getComments().size());
+        postDto.setComments(CommentMapper.INSTANCE.toCommentDtoList(post.getComments()));
+        return postDto;
+    }
 
     public abstract List<PostDto> toPostDtoList(List<Post> posts);
 
     public Page<PostDto> toPagePostDto(Page<Post> posts) {
-        return new PageImpl<>(toPostDtoList(posts.getContent()));
+        List<PostDto> postDtoList = toPostDtoList(posts.getContent());
+        List<Post> postList = posts.getContent();
+        postDtoList.forEach(postDto -> postDto.setNumberOfComments(
+                postList.stream().filter(post -> post.getId().equals(postDto.getId())).
+                        findFirst().orElse(new Post()).getComments().size()
+        ));
+
+        return new PageImpl<>(postDtoList);
     }
 }

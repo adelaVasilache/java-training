@@ -76,7 +76,7 @@ public class PostServiceTest {
     public void addCommentShouldThrowNotFoundException() throws NotFoundException {
         CommentDto commentDto = CommentFactory.createCommentDto(4L);
         User user = UserFactory.createUser();
-        postService.addComment(commentDto, user);
+        postService.addComment(commentDto, user, true);
     }
 
     @Test
